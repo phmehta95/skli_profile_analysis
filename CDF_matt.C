@@ -1,0 +1,41 @@
+{
+A = 0.01;
+B = 0.1;// any value from 0 to 1
+
+pdf = new TF1("pdf","1+[0]*sin((x+[1])*(2*pi))",0,1);
+pdf->SetParameter(0,A);
+pdf->SetParameter(1,B);
+pdf->SetNpx(1e6);
+
+canvpdf = new TCanvas("pdf","pdf",1600,900);
+pdf->Draw();
+
+// CDF = Integral PDF
+
+// Here, assume CDF == inverseCDF. Not strictly true but it is pretty close for small A
+icdf = new TF1("icdf","x+[0]*cos((x+[1])*(2*pi))/(2*pi)",0,1);
+icdf->SetParameter(0,A);
+icdf->SetParameter(1,B);
+icdf->SetNpx(1e6);
+
+canvcdf = new TCanvas("cdf","cdf",1600,900);
+icdf->Draw();
+
+r = new TRandom();
+
+nbins = 100;
+
+// The "inverseCDF" isn't guaranteed to start at 0 and end at 1, so restrict the range of the profile. Doesn't matter anyway since 1deg = 361deg so the angle can easily be put back into the range 0-360deg.
+h = new TH1D("h","",nbins,icdf->Eval(0),icdf->Eval(1));
+
+for (Int_t i = 0; i < 1e7; ++i)
+  {
+    h->Fill(icdf->Eval(r->Uniform()));
+  }
+
+h->Scale(1.0/(1e7/nbins));
+
+canvdist = new TCanvas("angledist","angledist",1600,900);
+h->Draw();
+h->Fit(pdf,"R");
+}
