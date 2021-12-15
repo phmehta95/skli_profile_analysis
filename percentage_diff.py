@@ -272,6 +272,10 @@ ax4.legend()
 ###########################################################################################################################
 
 func = lambda j: a*j**3 + b*j**2 +c*j +d
+#########################################################
+#FOR B5, QUADRATIC FIT GIVES A SMALLER INVCDF %DIFF
+#func = lambda j: a*j**4 + b*j**3 +c*j**2 +d*j + e
+########################################################
 #print (a,b,c,d)
 invfunc = inversefunc(func)
 x1 = np.linspace(0,1,160)
@@ -280,14 +284,32 @@ output = (invfunc(x1))
 
 def inv_model_func(x1, e, f, g, h):    
    return e*x1**3 + f*x1**2 +g*x1 +h   
-
+########################################################
+#def inv_model_func(x1, e, f, g, h, i):    
+#   return e*x1**4 + f*x1**3 +g*x1**2 +h*x1 + i   
+########################################################
+#create the weighting array
+#y_weight = np.empty(len(y_arr))
+#high pseudo-sd values, meaning less weighting in the fit
+#y_weight.fill(10)
+#low values for point 0 and the last points, meaning more weighting during the fit procedure 
+#y_weight[0] = y_weight[-5:-1] = 0.1
+#y_weight[0:2] = y_weight[-5:-1] = 0.1
    
 #popt, _ = curve_fit(inv_model_func,x1,output,sigma = y_weight, absolute_sigma = True)
 popt, _ = curve_fit(inv_model_func,x1,output)
+
 e, f, g, h = popt
-   
+#########################
+#e, f, g, h, i = popt
+#########################   
+
 y_line2 = inv_model_func(x1, e, f, g, h )
 inv_fit_equation = e*x1**3 + f*x1**2 +g*x1 +h
+############################################################
+#y_line2 = inv_model_func(x1, e, f, g, h, i )
+#inv_fit_equation = e*x1**4 + f*x1**3 +g*x1**2 +h*x1 + i
+############################################################
 print (output)
 print (inv_fit_equation)
 
