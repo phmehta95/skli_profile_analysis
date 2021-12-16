@@ -341,4 +341,41 @@ if args.B5:
 ax5.legend()
 ax6.legend()
 
-plt.show()
+#plt.show()
+
+
+############################################################################################################
+#
+#                                           INV CDF NEW METHOD
+#
+############################################################################################################
+
+icdf = ROOT.TF1("icdf","[0]*x**3 + [1]*x**2 + [2]*x + [3]",0,1)
+icdf.SetParameter(0,e)
+icdf.SetParameter(1,f)
+icdf.SetParameter(2,g)
+icdf.SetParameter(3,h)
+
+icdf.SetNpx(1000000)
+
+r = ROOT.TRandom()
+
+nbins = 100
+
+h = ROOT.TH1D("h","",nbins,icdf.Eval(0),icdf.Eval(1))
+
+#for (Int_t i = 0; i < 1e7; ++i)
+for i in np.arange(0,10000000,1):
+#   print (fjkdskfskdfh)
+   # print (icdf.Eval(r.Uniform()))
+   h.Fill(icdf.Eval(r.Uniform()))
+
+h.Scale(1.0/(10000000/nbins))
+
+c3 = ROOT.TCanvas("c3","c3",1600,900)
+#canvdist = new TCanvas("BLAH","BLAH",1600,900);
+c3.cd()
+h.Draw()
+c3.Update()
+#h.Fit(pdf,"R")
+#h->Fit(pdf);
