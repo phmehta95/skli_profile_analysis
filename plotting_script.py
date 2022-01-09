@@ -200,15 +200,58 @@ ax5.errorbar(azi_0_angle,azi_330_amplitude,yerr = amp_330_error,marker='x',color
 ax5.legend()
 ax5.set_xlabel("Polar angle (degrees)")
 ax5.set_ylabel("Amplitude")
-#plt.axis([30, 50, 0, 1])
+#plt.axis([20, 60, 0, 1])
 if args.D5:
     if args.water:
         plt.title("D5 water data")
+        plt.axvline(x = 27.0, linestyle = '--')
+        plt.axvline(x = 47.0, linestyle = '--')
     if args.air:
         plt.title("D5 air data")
+        plt.axvline(x = 34.0, linestyle = '--')
+        plt.axvline(x = 63.0, linestyle = '--')
 if args.HP1:
     if args.water:
         plt.title("HP1 water data")
+        plt.axvline(x = 27.0, linestyle = '--')
+        plt.axvline(x = 48.0, linestyle = '--')
     if args.air:
         plt.title("HP1 air data")
+        plt.axvline(x = 36.0, linestyle = '--')
+        plt.axvline(x = 70.0, linestyle = '--')
+
+#plt.show()
+
+pd.set_option("display.max_rows", None, "display.max_columns", None)
+#print(df)
+
+polar_array = []
+for i in np.arange(0,91,1):
+    polar_array.append(i)
+    
+
+df_polar_spread = []
+
+
+for i in range(91):
+    polar = df.iloc[i::91]
+    print(polar)
+    polar_amp_sum = polar["Amplitude"].sum()         
+    polar_amp_mean = polar_amp_sum/(len(polar["Amplitude"])) 
+    polar_min = polar["Amplitude"].min() 
+    polar_max = polar["Amplitude"].max()
+    polar_spread = polar_max - polar_min
+    df_polar_spread.append(polar_spread)
+
+print (polar_array)
+print (df_polar_spread)
+    
+plt.plot(polar_array,df_polar_spread)
+
+fig, (ax5) = plt.subplots(1)
+
+ax5.plot(polar_array, df_polar_spread)
+
+
+
 plt.show()
