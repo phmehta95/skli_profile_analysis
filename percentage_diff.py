@@ -207,32 +207,34 @@ y = np.array(cdf_vec_norm)
 x = np.delete(x,index)
 y = np.delete(y,index)
    #create the weighting array
-y_weight = np.empty(len(y))
+#y_weight = np.empty(len(y))
    #high pseudo-sd values, meaning less weighting in the fit
-y_weight.fill(10)
+#y_weight.fill(10)
    #low values for point 0 and the last points, meaning more weighting during the fit procedure 
-y_weight[0:2] = y_weight[-5:-1] = 0.1
+#y_weight[0:2] = y_weight[-5:-1] = 0.1
 ##y_weight[0:10]  = 0.1
    #print (x,y)
    #print (type(x))
    #print (type(y))
 
-def model_func(x, a, b, c, d, e, f, g, h):    
-   #return a*x**3 + b*x**2 +c*x +d   
+#def model_func(x, a, b, c, d, e, f, g, h):
+def model_func(x, a, b, c, d):    
+   return a*x**3 + b*x**2 +c*x +d   
    #return a*x**4 + b*x**3 +c*x**2 +d*x**1 + e
    #return a*x**6 + b*x**5 +c*x**4 +d*x**3 + e*x**2 + f*x + g
-   return a*x**7 + b*x**6 +c*x**5 +d*x**4+ e*x**3 + f*x**2+ g*x**1 + h 
-popt, _ = curve_fit(model_func,x,y,sigma = y_weight, absolute_sigma = True)
-##popt, _ = curve_fit(model_func,x,y)
-a, b, c, d, e, f, g, h = popt
-   
+   #return a*x**7 + b*x**6 +c*x**5 +d*x**4+ e*x**3 + f*x**2+ g*x**1 + h 
+#popt, _ = curve_fit(model_func,x,y,sigma = y_weight, absolute_sigma = True)
+popt, _ = curve_fit(model_func,x,y)
+#a, b, c, d, e, f, g, h = popt
+a, b, c, d = popt
    #y_fit = model_func(x, fit_equation[0], fit_equation[1])
    #print (a,b)
 #   x_line = np.arange(min(x), max(x), 1)
-y_line = model_func(x, a, b, c, d, e, f, g, h )
-#fit_equation = a*x**3 + b*x**2 +c*x +d
+#y_line = model_func(x, a, b, c, d, e, f, g, h )
+y_line = model_func(x, a, b, c, d)
+fit_equation = a*x**3 + b*x**2 +c*x +d
 #fit_equation = a*x**4 + b*x**3 +c*x**2 +d*x**1 + e
-fit_equation = a*x**7 + b*x**6 +c*x**5 +d*x**4+ e*x**3 + f*x**2+ g*x**1 + h
+#fit_equation = a*x**7 + b*x**6 +c*x**5 +d*x**4+ e*x**3 + f*x**2+ g*x**1 + h
 #print (x)
 #print (y)
 #print (fit_equation)
@@ -273,20 +275,26 @@ ax4.legend()
 ############################Percentage difference for invCDF and polynomial fit########################################### 
 ###########################################################################################################################
 
-func = lambda j:a*j**7 + b*j**6 +c*j**5 +d*j**4+ e*j**3 + f*j**2+ g*j**1 + h
+#func = lambda j:a*j**7 + b*j**6 +c*j**5 +d*j**4+ e*j**3 + f*j**2+ g*j**1 + h
+func = lambda j:a*j**3 + b*j**2 +c*j +d
 invfunc = inversefunc(func)
-x1 = np.linspace(0,1,160)
+x1 = np.linspace(0,1.1,160)
 output = (invfunc(x1))
    
 
 ########################################################
 if args.B5:
-   def inv_model_func(x1, i,r,k,l,m,n,o,p,q,s,t):    
-      return i*x1**10 + r*x1**9 +k*x1**8 + l*x1**7 + m*x1**6 + n*x1**5 + o*x1**4 + p*x1**3 + q*x1**2 +s*x1 + t
+#   def inv_model_func(x1, i,r,k,l,m,n,o,p,q,s,t):    
+#      return i*x1**10 + r*x1**9 +k*x1**8 + l*x1**7 + m*x1**6 + n*x1**5 + o*x1**4 + p*x1**3 + q*x1**2 +s*x1 + t
+   def inv_model_func(x1, i,r,k,l,m,n):    
+      return i*x1**5 + r*x1**4 +k*x1**3 + l*x1**2 + m*x1 + n
+
 ########################################################
 else:
-   def inv_model_func(x1, i,r,k,l,m,n,o,p):    
-      return i*x1**7 + r*x1**6 +k*x1**5 + l*x1**4 + m*x1**3 + n*x1**2 + o*x1 + p   
+   #def inv_model_func(x1, i,r,k,l,m,n,o,p):    
+   #   return i*x1**7 + r*x1**6 +k*x1**5 + l*x1**4 + m*x1**3 + n*x1**2 + o*x1 + p 
+   def inv_model_func(x1, i,r,k,l):    
+      return i*x1**3 + r*x1**2 +k*x1 + l
 
 
 #############################################################################################
@@ -308,20 +316,25 @@ popt, _ = curve_fit(inv_model_func,x1,output)
 #############################################################################################
 #########################
 if args.B5:
-   i,r,k,l,m,n,o,p,q,s,t = popt
+   #i,r,k,l,m,n,o,p,q,s,t = popt
+   i,r,k,l,m,n = popt
 #########################   
 else:
-   i,r,k,l,m,n,o,p = popt
-
+   #i,r,k,l,m,n,o,p = popt
+   i,r,k,l = popt
 
 ############################################################
 if args.B5:
-   y_line2 = inv_model_func(x1, i,r,k,l,m,n,o,p,q,s,t )
-   inv_fit_equation = i*x1**10 + r*x1**9 +k*x1**8 + l*x1**7 + m*x1**6 + n*x1**5 + o*x1**4 + p*x1**3 + q*x1**2 +s*x1 + t
+#   y_line2 = inv_model_func(x1, i,r,k,l,m,n,o,p,q,s,t )
+#   inv_fit_equation = i*x1**10 + r*x1**9 +k*x1**8 + l*x1**7 + m*x1**6 + n*x1**5 + o*x1**4 + p*x1**3 + q*x1**2 +s*x1 + t
+   y_line2 = inv_model_func(x1, i,r,k,l,m,n)
+   inv_fit_equation = i*x1**5 + r*x1**4 + k*x1**3 + l*x1**2 + m*x1 + n
 ############################################################
 else:
-   y_line2 = inv_model_func(x1, i,r,k,l,m,n,o,p )
-   inv_fit_equation = i*x1**7 + r*x1**6 +k*x1**5 + l*x1**4 + m*x1**3 + n*x1**2 + o*x1 + p
+   #y_line2 = inv_model_func(x1, i,r,k,l,m,n,o,p )
+   #inv_fit_equation = i*x1**7 + r*x1**6 +k*x1**5 + l*x1**4 + m*x1**3 + n*x1**2 + o*x1 + p
+   y_line2 = inv_model_func(x1, i,r,k,l)
+   inv_fit_equation = i*x1**3 + r*x1**2 + k*x1 + l
 print (output)
 print (inv_fit_equation)
 
@@ -361,28 +374,36 @@ ax6.legend()
 #                                    INV TRANSFORM SAMPLING SHAPE CHECK
 #
 ############################################################################################################
-icdf = ROOT.TF1("icdf","([0]*x**7 + [1]*x**6 +[2]*x**5 + [3]*x**4 + [4]*x**3 + [5]*x**2 + [6]*x + [7])",0,1)
+#icdf = ROOT.TF1("icdf","([0]*x**7 + [1]*x**6 +[2]*x**5 + [3]*x**4 + [4]*x**3 + [5]*x**2 + [6]*x + [7])",0,1)
+icdf = ROOT.TF1("icdf","([0]*x**3 + [1]*x**2 +[2]*x + [3])", 0,1)
 icdf.SetParameter(0,i)
 icdf.SetParameter(1,r)
 icdf.SetParameter(2,k)
 icdf.SetParameter(3,l)
-icdf.SetParameter(4,m)
-icdf.SetParameter(5,n)
-icdf.SetParameter(6,o)
-icdf.SetParameter(7,p)
+#icdf.SetParameter(4,m)
+#icdf.SetParameter(5,n)
+#icdf.SetParameter(6,o)
+#icdf.SetParameter(7,p)
 if args.B5:
-   icdf = ROOT.TF1("icdf","[0]*x**10 + [1]*x**9 +[2]*x**8 + [3]*x**7 + [4]*x**6 + [5]*x**5 + [6]*x**4 + [7]*x**3 + [8]*x**2 +[9]*x + [10]",0,1)
+#   icdf = ROOT.TF1("icdf","[0]*x**10 + [1]*x**9 +[2]*x**8 + [3]*x**7 + [4]*x**6 + [5]*x**5 + [6]*x**4 + [7]*x**3 + [8]*x**2 +[9]*x + [10]",0,1)
+#   icdf.SetParameter(0,i)
+#   icdf.SetParameter(1,r)
+#   icdf.SetParameter(2,k)
+#   icdf.SetParameter(3,l)
+#   icdf.SetParameter(4,m)
+#   icdf.SetParameter(5,n)
+#   icdf.SetParameter(6,o)
+#   icdf.SetParameter(7,p)
+#   icdf.SetParameter(8,q)
+#   icdf.SetParameter(9,s)
+#   icdf.SetParameter(10,t)
+   icdf = ROOT.TF1("icdf","([0]*x**5 + [1]*x**4 +[2]*x**3 + [3]*x**2 + [4]*x + [5])", 0,1)
    icdf.SetParameter(0,i)
    icdf.SetParameter(1,r)
    icdf.SetParameter(2,k)
    icdf.SetParameter(3,l)
    icdf.SetParameter(4,m)
    icdf.SetParameter(5,n)
-   icdf.SetParameter(6,o)
-   icdf.SetParameter(7,p)
-   icdf.SetParameter(8,q)
-   icdf.SetParameter(9,s)
-   icdf.SetParameter(10,t)
 
 icdf.SetNpx(1000000)
 r = ROOT.TRandom()
@@ -397,3 +418,5 @@ h.Draw()
 c3.Update()
 h.Fit(icdf,"R")
 
+
+plt.show()
