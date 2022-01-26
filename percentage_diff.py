@@ -3,6 +3,7 @@ import ROOT
 import ROOT.gROOT
 import ROOT.TF1
 import ROOT.TCanvas
+import ROOT.gPad
 import sys
 import os
 import numpy as np
@@ -126,18 +127,18 @@ ax2.legend()
 ############################Percentage difference for for CDF and polynomial fit########################################### 
 ###########################################################################################################################
 #if args.B1:
-y = fit.GetParameter(0)
-y1 = fit.GetParameter(1)
-y2 = fit.GetParameter(2)
-y3 = fit.GetParameter(3)
-y4 = fit.GetParameter(4)
-y5 = fit.GetParameter(5)
-y6 = fit.GetParameter(6)
-y7 = fit.GetParameter(7)
-y8 = fit.GetParameter(8)
+yy = fit.GetParameter(0)
+yy1 = fit.GetParameter(1)
+yy2 = fit.GetParameter(2)
+yy3 = fit.GetParameter(3)
+yy4 = fit.GetParameter(4)
+yy5 = fit.GetParameter(5)
+yy6 = fit.GetParameter(6)
+yy7 = fit.GetParameter(7)
+yy8 = fit.GetParameter(8)
 #y9 = fit.GetParameter(9)
 
-print(y,y1,y2,y3,y4,y5,y6,y7,y8)
+print(yy,yy1,yy2,yy3,yy4,yy5,yy6,yy7,yy8)
 
     
 g = ROOT.TF1("ff", "([0]+([1]*x) + ([2]*x*x) +([3]*x*x*x)+([4]*x*x*x*x)+([5]*x*x*x*x*x)+([6]*x*x*x*x*x*x)+([7]*x*x*x*x*x*x*x)+([8]*x*x*x*x*x*x*x*x))", -40,40)
@@ -150,15 +151,15 @@ angle = []
 pdf_vec_array= []
     #for x in np.arange(-40,40,0.5)
 for x in np.arange(-40,40,0.5):
-   a = y
-   b = y1
-   c = y2
-   d = y3
-   e = y4
-   f = y5
-   g = y6
-   h = y7
-   i = y8
+   a = yy
+   b = yy1
+   c = yy2
+   d = yy3
+   e = yy4
+   f = yy5
+   g = yy6
+   h = yy7
+   i = yy8
         #    x = x/1.3
         
    function = (a+(b*x)+(c*x*x)+(d*x*x*x)+(e*x*x*x*x)+(f*x*x*x*x*x)+(g*x*x*x*x*x*x)+(h*x*x*x*x*x*x*x)+(i*x*x*x*x*x*x*x*x))
@@ -444,8 +445,20 @@ h.Scale(1.0/(10000000/nbins))
 c3 = ROOT.TCanvas("c3","c3",1600,900)
 c3.cd()
 h.Draw()
+#gPad.Update()
 c3.Update()
-h.Fit(icdf,"R")
+#h.Fit(icdf,"R")
+g = ROOT.TF1("g", "([0]+([1]*x) + ([2]*x*x) +([3]*x*x*x)+([4]*x*x*x*x)+([5]*x*x*x*x*x)+([6]*x*x*x*x*x*x)+([7]*x*x*x*x*x*x*x)+([8]*x*x*x*x*x*x*x*x))",-40,40)
+g.SetParameter(0,yy)
+g.SetParameter(1,yy1)
+g.SetParameter(2,yy2)
+g.SetParameter(3,yy3)
+g.SetParameter(4,yy4)
+g.SetParameter(5,yy5)
+g.SetParameter(6,yy6)
+g.SetParameter(7,yy7)
+g.SetParameter(8,yy8)
 
-
+h.Fit(g,"R")
+c3.Update()
 plt.show()
