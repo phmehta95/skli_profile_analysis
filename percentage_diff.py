@@ -134,8 +134,13 @@ y4 = fit.GetParameter(4)
 y5 = fit.GetParameter(5)
 y6 = fit.GetParameter(6)
 y7 = fit.GetParameter(7)
+y8 = fit.GetParameter(8)
+#y9 = fit.GetParameter(9)
+
+print(y,y1,y2,y3,y4,y5,y6,y7,y8)
+
     
-g = ROOT.TF1("ff", "([0]+([1]*x) + ([2]*x*x) +([3]*x*x*x)+([4]*x*x*x*x)+([5]*x*x*x*x*x)+([6]*x*x*x*x*x*x)+([7]*x*x*x*x*x*x*x))", -40,40)
+g = ROOT.TF1("ff", "([0]+([1]*x) + ([2]*x*x) +([3]*x*x*x)+([4]*x*x*x*x)+([5]*x*x*x*x*x)+([6]*x*x*x*x*x*x)+([7]*x*x*x*x*x*x*x)+([8]*x*x*x*x*x*x*x*x))", -40,40)
 
 cdf_vec_hold = 0
 cdf_vec_array = []
@@ -153,9 +158,10 @@ for x in np.arange(-40,40,0.5):
    f = y5
    g = y6
    h = y7
+   i = y8
         #    x = x/1.3
         
-   function = (a+(b*x)+(c*x*x)+(d*x*x*x)+(e*x*x*x*x)+(f*x*x*x*x*x)+(g*x*x*x*x*x*x)+(h*x*x*x*x*x*x*x))
+   function = (a+(b*x)+(c*x*x)+(d*x*x*x)+(e*x*x*x*x)+(f*x*x*x*x*x)+(g*x*x*x*x*x*x)+(h*x*x*x*x*x*x*x)+(i*x*x*x*x*x*x*x*x))
    
    angle.append(x)
    pdf_vec_array.append(function)
@@ -238,6 +244,29 @@ fit_equation = a*x**3 + b*x**2 +c*x +d
 #print (x)
 #print (y)
 #print (fit_equation)
+################################################################################################################
+#                                  FITTING CDF DATA POINTS USING CUBIC SPLINE
+#
+################################################################################################################
+#arr = np.arange(np.amin(arr_angle), np.amax(arr_angle), 0.01)
+#s = interpolate.CubicSpline(arr_angle, cdf_vec_norm)
+#xarray = np.array(arr_angle)
+#yarray = np.array(cdf_vec_norm)
+
+#for i in range(xarray.shape[0] - 1):
+#    segment_x = np.linspace(xarray[i], xarray[i + 1], 100)
+    # A (4, 100) array, where the rows contain (x-x[i])**3, (x-x[i])**2 etc.
+#    exp_x = (segment_x - xarray[i])[None, :] ** np.arange(4)[::-1, None]
+    # Sum over the rows of exp_x weighted by coefficients in the ith column of s.c
+#    segment_y = s.c[:, i].dot(exp_x)
+#    plt.plot(segment_x, segment_y, label='Segment {}'.format(i), ls='--', lw=3)
+
+
+
+#fig, (ax7) = plt.subplots(1)
+#ax7.scatter(arr_angle, cdf_vec_norm, marker='x',color = 'r',alpha = 0.5, label = 'Data points')
+#ax7.plot(arr, s(arr), 'r-', label='Cubic Spline')
+
 #################################################################################################################
 #                                    PERCENTAGE DIFFERENCE CALCULATION
 #
